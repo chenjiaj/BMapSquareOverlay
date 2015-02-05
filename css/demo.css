@@ -1,0 +1,64 @@
+#map {
+  width: 900px;
+  height: 500px;
+  margin: 50px auto;
+  background-color: red;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+.area {
+  border: 1px solid #ddd;
+  position: absolute;
+}
+.area .ui-resizable-handler {
+  position: absolute;
+  border: 1px solid #ddd;
+  background-color: #fff;
+  width: 10px;
+  height: 10px;
+}
+.area .ui-resizable-ne {
+  right: -5px;
+  top: -5px;
+  cursor: ne-resize;
+}
+.area .ui-resizable-nw {
+  left: -5px;
+  top: -5px;
+  cursor: nw-resize;
+}
+.area .ui-resizable-se {
+  right: -5px;
+  bottom: -5px;
+  cursor: se-resize;
+}
+.area .ui-resizable-sw {
+  left: -5px;
+  bottom: -5px;
+  cursor: sw-resize;
+}
+.area .ui-resizable-n {
+  top: -5px;
+  left: 50%;
+  margin-left: -5px;
+  cursor: n-resize;
+}
+.area .ui-resizable-s {
+  bottom: -5px;
+  left: 50%;
+  margin-left: -5px;
+  cursor: s-resize;
+}
+.area .ui-resizable-e {
+  right: -5px;
+  top: 50%;
+  margin-top: -5px;
+  cursor: e-resize;
+}
+.area .ui-resizable-w {
+  left: -5px;
+  top: 50%;
+  margin-top: -5px;
+  cursor: w-resize;
+}
