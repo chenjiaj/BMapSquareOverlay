@@ -19,13 +19,17 @@
             this.map.centerAndZoom(poi, 16);
             this.map.enableScrollWheelZoom();
             //this.map.disableDragging();
-            this.map.addEventListener("click",function(e){
+           /* this.map.addEventListener("click",function(e){
                 console.log(e.point.lng + "," + e.point.lat);
-            });
+            });*/
         },
         createArea:function(){
-            var mySquare = new SquareOverlay(this.map.getCenter(), 200, "rgba(0,0,0,0.5)",this.map);
-            this.map.addOverlay(mySquare);
+            this.mySquare = new SquareOverlay(this.map.getCenter(), 200, "rgba(0,0,0,0.5)",this.map);
+            this.map.addOverlay(this.mySquare);
+            console.log(JSON.stringify(this.getGeography()));
+        },
+        getGeography:function(){
+            return this.mySquare.getGeography();
         }
     }
     // 百度地图API功能
