@@ -9,7 +9,7 @@
     <file path="/demo.less" changelist="4b129810-4c2a-47e0-888e-8ee08ba1d2ad" time="1423113485977" ignored="false" />
     <file path="/squere.js" changelist="4b129810-4c2a-47e0-888e-8ee08ba1d2ad" time="1423120009923" ignored="false" />
     <file path="/resizer.js" changelist="4b129810-4c2a-47e0-888e-8ee08ba1d2ad" time="1423103771397" ignored="false" />
-    <file path="/.gitignore" changelist="4b129810-4c2a-47e0-888e-8ee08ba1d2ad" time="1423120831068" ignored="false" />
+    <file path="/.gitignore" changelist="4b129810-4c2a-47e0-888e-8ee08ba1d2ad" time="1423121000090" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,7 +59,7 @@
       <file leaf-file-name=".gitignore" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/.gitignore">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="1" column="7" selection-start="13" selection-end="13" vertical-scroll-proportion="0.02764977">
+            <state line="3" column="11" selection-start="45" selection-end="45" vertical-scroll-proportion="0.08294931">
               <folding />
             </state>
           </provider>
@@ -389,7 +389,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="1" column="7" selection-start="13" selection-end="13" vertical-scroll-proportion="0.02764977">
+        <state line="3" column="11" selection-start="45" selection-end="45" vertical-scroll-proportion="0.08294931">
           <folding />
         </state>
       </provider>
