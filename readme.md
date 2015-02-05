@@ -18,10 +18,10 @@ http://api.map.baidu.com/library/DrawingManager/1.4/docs/symbols/BMapLib.Drawing
     this.map.addOverlay(mySquare);
     传入的四个参数分别是中心点point、矩形宽高、背景色、当前的map对象
 >###（3）获得四个点的地理坐标位置
-可以调用g自定义覆盖物对象的getGeography(),获得一个对象
-return {
+可以调用自定义覆盖物对象的getGeography(),获得一个对象
+<pre>return {
         ltPoint:this.ltPoint,//左上角经纬度
         lbPoint:this.lbPoint,//左下角经纬度
         rbPoint:this.rbPoint,//右上角经纬度
         rtPoint:this.rtPoint//右下角经纬度
-    }
+    }</pre>
