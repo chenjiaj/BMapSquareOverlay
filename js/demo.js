@@ -26,7 +26,7 @@
         createArea:function(){
             this.mySquare = new SquareOverlay(this.map.getCenter(), 200, "rgba(0,0,0,0.5)",this.map);
             this.map.addOverlay(this.mySquare);
-            console.log(JSON.stringify(this.getGeography()));
+            //console.log(JSON.stringify(this.getGeography()));
         },
         getGeography:function(){
             return this.mySquare.getGeography();

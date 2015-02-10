@@ -45,8 +45,16 @@ SquareOverlay.prototype.initialize = function(map){//在执行this.map.addOverla
     this._div = div.get(0);
     this.div = div;
     this.createResizer(map);
-    return this._div;
+    this.setPosition();
+    this.setGeography();
 
+    var _this = this;
+    _this.map.addEventListener('zoomend',function(){
+        _this.setWH();
+        _this.setCenter();
+        _this.setPosition();
+    });
+    return this._div;
 
 }
 
@@ -125,6 +133,8 @@ SquareOverlay.prototype.createResizer = function(map){//创建
     resizer.bind('afterResize', function(){
         _this.setGeography();
         _this.setCenter();
+        _this.setWH();
+        _this.setPosition();
     });
     $('.area').on('mousedown',function(e){
         e.stopPropagation();
@@ -133,8 +143,10 @@ SquareOverlay.prototype.createResizer = function(map){//创建
 }
 
 SquareOverlay.prototype.setCenter = function(){//当mouseup后会调用此函数，将地图居中到覆盖物的中心
-    var left = this.div.position().left;
-    var top = this.div.position().top;
+    var point = this.getGeography();
+    var ltPoint = this.map.pointToOverlayPixel(point.ltPoint);
+    var left = ltPoint.x;
+    var top = ltPoint.y
     var width=this.width;
     var height=this.height;
     var centerX = left + width / 2;
@@ -193,13 +205,30 @@ SquareOverlay.prototype.getGeography = function(){//获取矩形四个点的地�
         rtPoint:this.rtPoint
     }
 }
-
+SquareOverlay.prototype.setWH = function(){
+    var point = this.getGeography();
+    var ltPoint = this.map.pointToOverlayPixel(point.ltPoint);
+    var lbPoint = this.map.pointToOverlayPixel(point.lbPoint);
+    var rbPoint = this.map.pointToOverlayPixel(point.rbPoint);
+    var rtPoint = this.map.pointToOverlayPixel(point.rtPoint);
+    var width = Math.abs(rtPoint.x - ltPoint.x);
+    var height =Math.abs(lbPoint.y - ltPoint.y);
+    this.div.width(width);
+    this.div.height(height);
+    this.width = width;
+    this.height = height;
+}
 // 实现绘制方法
-SquareOverlay.prototype.draw = function(){//当调用centerZoom 或者panTo等时都会调用此函数
+
+SquareOverlay.prototype.setPosition = function(){//当调用centerZoom 或者panTo等时都会调用此函数
     // 根据地理坐标转换为像素坐标，并设置给容器
     var position = this.map.pointToOverlayPixel(this._center);
         this._div.style.left = position.x - this.width / 2 + "px";
         this._div.style.top = position.y - this.height / 2 + "px";
-    this.setGeography();
-    //console.log(JSON.stringify(this.getGeography()));
+
+}
+
+SquareOverlay.prototype.draw =function(){
+    //百度地图定时调用调用，为防止出现不可控的问题，因重写此函数为setPosition，手动调用
+
 }
