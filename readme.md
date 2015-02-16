@@ -2,21 +2,44 @@
 
 ------
 
-百度地图暂时还未提供矩形覆盖物功能，虽有绘制覆盖物插件**DrawingManager**中可以绘制矩形，但是未提供拖拽和矩形编辑功能
+国外地图大多有加载限制，加载到一定数量就会收费，有一个组织提供了地图图片，另一个组织提供了使用图片的js和css
+一个免费的国外地图文档地址http://leafletjs.com/reference.html#map-zoomlevelschange
 
-本自定义矩形覆盖物创建一个处于编辑状态的矩形，支持大小编辑和拖拽功能，编辑后自动居中到覆盖物中心
 
-##一、百度地图的DrawingManager插件
->###（1）例子http://developer.baidu.com/map/jsdemo.htm#f0_7
->###2）使用文档BMapLib.DrawingManager
-http://api.map.baidu.com/library/DrawingManager/1.4/docs/symbols/BMapLib.DrawingManager.html
-
-##二、自定义矩形覆盖物使用说明
+##一、自定义矩形覆盖物使用说明
 >###（1）引入jquery-1.11.1.min.js、resizer.js、squere.js文件
 >###（2）在你使用的文件js中添加创建地图后再创建自定义矩形覆盖物
-    var mySquare = new SquareOverlay(this.map.getCenter(), 200, "rgba(0,0,0,0.5)",this.map);
-    this.map.addOverlay(mySquare);
-    传入的四个参数分别是中心点point、矩形宽高、背景色、当前的map对象
+    直接使用 this.mySquare = new SquareOverlay(this.point, 200, "rgba(0,0,0,0.5)",this.map);
+    this.point是一个数组[51.505, -0.09];
+    
+    例子：
+    <pre>
+    var mapManager = {
+        init:function(){
+            this.createMap();
+            this.createArea();
+        },
+        createMap:function(){
+            this.point = [51.505, -0.09];
+            this.map = L.map('map').setView(this.point, 13);
+            var  cloudmadeUrl = 'http://{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png';
+            var	subDomains = ['otile1','otile2','otile3','otile4'];
+            var	cloudmadeAttrib = 'Data, imagery and map information provided by <a href="http://open.mapquest.co.uk" target="_blank">MapQuest</a>, <a href="http://www.openstreetmap.org/" target="_blank">OpenStreetMap</a> and contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/" target="_blank">CC-BY-SA</a>';
+            L.tileLayer(cloudmadeUrl, {maxZoom: 18, attribution: cloudmadeAttrib, subdomains: subDomains}).addTo(this.map);
+            /*this.map.on('click',function(e){
+                console.log(e.latlng);
+            });*/
+
+        },
+        createArea:function(){
+            this.mySquare = new SquareOverlay(this.point, 200, "rgba(0,0,0,0.5)",this.map);
+        },
+        getGeography:function(){
+            return this.mySquare.getGeography();
+        }
+    }
+    //地图API功能
+    mapManager.init();</pre>
 >###（3）获得四个点的地理坐标位置
 可以调用自定义覆盖物对象的getGeography(),获得一个对象
 <pre>return {

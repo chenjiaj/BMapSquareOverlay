@@ -4,6 +4,8 @@
  * Author: chenjiajun
  * Date: 15-2-4
  * Time: 上午10:37
+ * leafletjs地图文档地址
+ * http://leafletjs.com/reference.html#map-zoomlevelschange
  */
 // 定义自定义覆盖物的构造函数
 function SquareOverlay(center, length, color,map){
@@ -11,14 +13,12 @@ function SquareOverlay(center, length, color,map){
     this._color = color;
     this.width = length;
     this.height = length;
-    this.map = map
+    this.map = map;
+    this.initialize();
 }
 
-// 继承API的BMap.Overlay
-SquareOverlay.prototype = new BMap.Overlay();
-
 // 实现初始化方法
-SquareOverlay.prototype.initialize = function(map){//在执行this.map.addOverlay(mySquare)会调用此函数
+SquareOverlay.prototype.initialize = function(){
     // 保存map对象实例
 
     // 创建div元素，作为自定义覆盖物的容器
@@ -44,12 +44,12 @@ SquareOverlay.prototype.initialize = function(map){//在执行this.map.addOverla
     // 保存div实例
     this._div = div.get(0);
     this.div = div;
-    this.createResizer(map);
+    this.createResizer(this.map);
     this.setPosition();
     this.setGeography();
 
     var _this = this;
-    _this.map.addEventListener('zoomend',function(){
+    this.map.on('zoomend',function(){//改变地图层级时触发的事件
         _this.setWH();
         _this.setCenter();
         _this.setPosition();
@@ -58,11 +58,11 @@ SquareOverlay.prototype.initialize = function(map){//在执行this.map.addOverla
 
 }
 
-SquareOverlay.prototype.createResizer = function(map){//创建
-    this._map = map;
+SquareOverlay.prototype.createResizer = function(){//创建
+    this._map = this.map;
     var _this = this;
     // 将div添加到覆盖物容器中
-    _this.map.getPanes().markerPane.appendChild(_this._div);
+    this.map.getPanes().overlayPane.appendChild(_this._div);
     var resizer = new Resizer();
     var $wrapper = _this._div;
     $('.ui-resizable-handler').bind('mousedown', function(e){
@@ -144,57 +144,41 @@ SquareOverlay.prototype.createResizer = function(map){//创建
 
 SquareOverlay.prototype.setCenter = function(){//当mouseup后会调用此函数，将地图居中到覆盖物的中心
     var point = this.getGeography();
-    var ltPoint = this.map.pointToOverlayPixel(point.ltPoint);
+    var ltPoint = this.map.latLngToLayerPoint(point.ltPoint);
     var left = ltPoint.x;
     var top = ltPoint.y
     var width=this.width;
     var height=this.height;
     var centerX = left + width / 2;
     var centerY = top + height / 2;
-    var center = {
-        x:centerX,
-        y:centerY
-    }
-    var point = this.map.overlayPixelToPoint(center);
-    this._center = point;//因为调用panTo时会调用draw函数,因此需要重新设置中心点
-    this.map.panTo(new BMap.Point(point.lng,point.lat));
+    var center = L.point(centerX, centerY);
+    var pointa = this.map.layerPointToLatLng(center);
+    this._center = [pointa.lat,pointa.lng];//因为调用panTo时会调用draw函数,因此需要重新设置中心点
+    this.map.panTo(this._center);
 
 }
 
 SquareOverlay.prototype.setGeography = function(){
-//通过百度地图自带的apioverlayPixelToPoint将获取的四个点的覆盖物像素转换为四个点的地理位置
+//通过地图自带的layerPointToLatLng将获取的四个点的覆盖物像素转换为四个点的地理位置
     var left = this.div.position().left;
     var top = this.div.position().top;
     this.width=this.div.width();
     this.height=this.div.height();
-    var LeftTopPoint = {
-        x:left,
-        y:top
-    }
-    var LeftBottomPoint = {
-        x:left,
-        y:top + this.height
-    }
-    var RightBottomPoint = {
-        x:left + this.width,
-        y:top + this.height
-    }
-    var RightTopPoint = {
-        x:left + this.width,
-        y:top
-    }
+    var LeftTopPoint = L.point(left, top);
+    var LeftBottomPoint = L.point(left, top + this.height);
+    var rightTopPoint = L.point(left + this.width, top);
+    var RightBottomPoint = L.point(left + this.width, top + this.height);
 
-   /* console.log('左上角的坐标位置：'+JSON.stringify(this.div.position()));
+  /* console.log('左上角的坐标位置：'+JSON.stringify(this.div.position()));
     console.log('地理位置：');
-    console.log('左上角：'+JSON.stringify(this.map.overlayPixelToPoint(LeftTopPoint))+'；' +
-        '左下角：'+JSON.stringify(this.map.overlayPixelToPoint(LeftBottomPoint))+'；'+
-        '右上角：'+JSON.stringify(this.map.overlayPixelToPoint(RightBottomPoint))+'；'+
-        '右下角：'+JSON.stringify(this.map.overlayPixelToPoint(RightTopPoint)));*/
-
-    this.ltPoint = this.map.overlayPixelToPoint(LeftTopPoint);
-    this.lbPoint = this.map.overlayPixelToPoint(LeftBottomPoint);
-    this.rbPoint = this.map.overlayPixelToPoint(RightBottomPoint);
-    this.rtPoint = this.map.overlayPixelToPoint(RightTopPoint);
+    console.log('左上角：'+JSON.stringify(this.map.layerPointToLatLng(LeftTopPoint))+'；' +
+        '左下角：'+JSON.stringify(this.map.layerPointToLatLng(LeftBottomPoint))+'；'+
+        '右上角：'+JSON.stringify(this.map.layerPointToLatLng(RightBottomPoint))+'；'+
+        '右下角：'+JSON.stringify(this.map.layerPointToLatLng(rightTopPoint)));*/
+    this.ltPoint = this.map.layerPointToLatLng(LeftTopPoint);
+    this.lbPoint = this.map.layerPointToLatLng(LeftBottomPoint);
+    this.rbPoint = this.map.layerPointToLatLng(RightBottomPoint);
+    this.rtPoint = this.map.layerPointToLatLng(rightTopPoint);
 }
 
 SquareOverlay.prototype.getGeography = function(){//获取矩形四个点的地理位置
@@ -205,12 +189,13 @@ SquareOverlay.prototype.getGeography = function(){//获取矩形四个点的地�
         rtPoint:this.rtPoint
     }
 }
-SquareOverlay.prototype.setWH = function(){
+SquareOverlay.prototype.setWH = function(){//设置宽高，当改变地图显示级别时
+    //latLngToLayerPoint可以将地理位置改变为坐标位置
     var point = this.getGeography();
-    var ltPoint = this.map.pointToOverlayPixel(point.ltPoint);
-    var lbPoint = this.map.pointToOverlayPixel(point.lbPoint);
-    var rbPoint = this.map.pointToOverlayPixel(point.rbPoint);
-    var rtPoint = this.map.pointToOverlayPixel(point.rtPoint);
+    var ltPoint = this.map.latLngToLayerPoint(point.ltPoint);
+    var lbPoint = this.map.latLngToLayerPoint(point.lbPoint);
+    var rbPoint = this.map.latLngToLayerPoint(point.rbPoint);
+    var rtPoint = this.map.latLngToLayerPoint(point.rtPoint);
     var width = Math.abs(rtPoint.x - ltPoint.x);
     var height =Math.abs(lbPoint.y - ltPoint.y);
     this.div.width(width);
@@ -222,13 +207,8 @@ SquareOverlay.prototype.setWH = function(){
 
 SquareOverlay.prototype.setPosition = function(){//当调用centerZoom 或者panTo等时都会调用此函数
     // 根据地理坐标转换为像素坐标，并设置给容器
-    var position = this.map.pointToOverlayPixel(this._center);
+    var latlng = L.latLng(this._center[0],this._center[1]);
+    var position = this.map.latLngToLayerPoint(latlng);
         this._div.style.left = position.x - this.width / 2 + "px";
         this._div.style.top = position.y - this.height / 2 + "px";
-
-}
-
-SquareOverlay.prototype.draw =function(){
-    //百度地图定时调用调用，为防止出现不可控的问题，因重写此函数为setPosition，手动调用
-
 }
