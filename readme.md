@@ -1,4 +1,4 @@
-#BMapSquareOverlay自定义矩形覆盖物文档说明
+#SquareOverlay自定义矩形覆盖物文档说明
 
 ------
 
