@@ -61,8 +61,10 @@ SquareOverlay.prototype.initialize = function(){
 SquareOverlay.prototype.createResizer = function(){//创建
     this._map = this.map;
     var _this = this;
+
     // 将div添加到覆盖物容器中
     this.map.getPanes().overlayPane.appendChild(_this._div);
+
     var resizer = new Resizer();
     var $wrapper = _this._div;
     $('.ui-resizable-handler').bind('mousedown', function(e){

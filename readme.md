@@ -7,7 +7,10 @@
 
 
 ##一、自定义矩形覆盖物使用说明
->###（1）引入jquery-1.11.1.min.js、resizer.js、squere.js文件
+>###（1）引入jquery-1.11.1.min.js、resizer.js、squere.js
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+    <link rel="stylesheet" href="css/demo.css"  type="text/css"/>
+    <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
 >###（2）在你使用的文件js中添加创建地图后再创建自定义矩形覆盖物
     直接使用 this.mySquare = new SquareOverlay(this.point, 200, "rgba(0,0,0,0.5)",this.map);
     this.point是一个数组[51.505, -0.09];
