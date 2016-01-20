@@ -1,3 +1,5 @@
+###[demo](http://chenjiaj.github.io/BMapSquareOverlay/bmapDemo.html)
+
 #BMapSquareOverlay自定义矩形覆盖物文档说明
 
 ------
